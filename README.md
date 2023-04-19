@@ -70,8 +70,6 @@ We created new features and one-hot encoded categorical features to come up with
 ![Correlation Matrix](Images/corr_with_price.png)
 
 
-
-
 ### Baseline model results:
 
 Using the raw data from target 'price' and selected feature 'sqft_living', we create a simple baseline model.
@@ -89,10 +87,6 @@ The qq plot above shows that a large portion of the true data points in 'sqft_li
 ## Iterating the model
 
 
-
-
-
-
 ### Log Transformations
 
 After performing log transformation on the target and feature from our simple baseline model, we see that the distribution of each normalizes:
@@ -107,7 +101,53 @@ Using MinMaxScaler from Sci-kit Learn, we were able to scale the data to a given
 
 This is done by subtracting the minimum value of the feature and then dividing it by the range (the difference between the maximum and minimum values). The purpose of feature scaling is to standardize the range of independent variables or features of data. 
 
-### Iterated model
+### Multiple linear regression: all-features model
+
+In our first iteration of the baseline model we decided to use all relevant features, excluding features that had either been used to create new features or had been dropped altogether( like 'address', 'city', 'state', 'date' and 'id'). 
 
 
+Using all relevant features, our r-squared value jumped to 0.697, which tells us that the model can help explain around 70% of the variation in new target 'price_log'. 
 
+Based on the all-features model, which contained high amounts of collinearity, we concluded that certain features (according to their coefficients and corresponding p-values), should be dropped. The  features affecting our model were: 'bedrooms', 'season_winter', 'sewer_system_PUBLIC RESTRICTED', 'heat_source_Oil', 'heat_source_Oil/Solar', 'greenbelt_YES', 'luxury_grade', 'sqft_garage_log', and 'heat_source_Other'. 
+
+### Iterated all-features model
+
+After dropping offending features, we came out with a similar r-sq value as our previous model, but multicollinearity had been addressed, and we reached certain conclusions about the groups of features that had the most impact on predicting prices: 'sqft' features and 'zip_tier' features.
+
+
+Based on their coefficients, the 7 most significant features and their corresponding coefficients in our final model are:
+
+- pp_sqft: 0.632
+- sqft_above: 0.302
+- sqft_living_log: 0.216
+- zip_tier_7: 0.125
+- zip_tier_6: 0.092
+- sqft_basement: 0.077
+- zip_tier_5: 0.075
+
+Predicted percentage increase in price_log for pp_sqft: 88.14%
+Predicted percentage percentage increase in price_log for sqft_above: 35.26%
+Predicted percentage percentage increase in price_log for sqft_living_log: 24.11%
+Predicted percentage increase in price_log for zip_tier_7: 13.31%
+Predicted percentage increase in price_log for zip_tier_6: 9.64%
+Predicted percentage increase in price_log for sqft_basement: 8.00%
+Predicted percentage increase in price_log for zip_tier_5: 7.79%
+
+
+![Zip_Tiers_Interactions](Images/ziptiers_final_model.png)
+
+
+In this plot, we're showing the interaction between sqft_living_log and our top 3 zipcode tiers (5, 6, &7). Between tiers 5 and 7, the datapoints fit progressively closer to the fitted regression lines. It looks like we could have spent some more time checking for outliers in the data to avoid homoscedasicity. However, the relationships appear fairly linear and provide us with the notion that with every increase in zip tier, sqft of living area increases, and consequently, so does home sale price.
+
+
+# Modeling conclusions and next steps
+
+#### LOCATION IS KEY
+
+Recall that Zip Tear 7 consists of these zipcodes: 98055, 98133, 98178, 98118, 98027, 98166, 98030, 98023, 98019, 98144, 98031, 98092, 98103, 98006, 98136, 98007, 98038, 98057, 98077, 98126, 98053, 98039, 98107, 98008, 98155, 98168, 98199, 98004, 98045, 98052, 98011, 98033, 98116, 98198, 98125, 98112, 98034, 98056, 98059, 98005, 98040, 98014, 98106, 98029, 98122, 98117, 98042, 98119, 98065, 98022, 98072, 98058, 98108, 98115, 98074, 98105, 98024, 98146, 98109, 98102, 98028, 98188, 98177, 98075, 98010, 98148, 98047, 98032, 98070, 98051, 98050, 98251, 98223, 98224, 98270.
+
+This information can be used by Long and Foster to identify which areas have the highest demand for homes and which areas are likely to see the greatest appreciation in value over time. By focusing their marketing efforts and investing in properties in these zip codes, they can maximize their profits and provide their clients with the best possible returns on their investments.
+
+Additionally, the zip tier features can also provide valuable insights into the amenities and features of each location. For example, properties in zip_tier_6 and zip_tier_7 are likely to be closer to urban centers and have access to a wider range of amenities, such as restaurants, shopping centers, and public transportation. Properties in zip_tier_5, on the other hand, may be more suburban or rural and offer more space and privacy.
+
+Overall, the zip tier features and their coefficients provide a wealth of information for real estate companies like Long and Foster. By understanding the impact of location on the price of a house, they can make informed decisions about where to invest their resources and how to market their properties to potential buyers.
