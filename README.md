@@ -36,6 +36,28 @@ Target 'price' is fairly skewed.
 
 ## Data Preparation
 
+### Feature Engineering & Encoding
+
+We created new features and one-hot encoded categorical features to come up with the following set of features:
+
+[id', 'date', 'price', 'bedrooms', 'bathrooms', 'sqft_living',
+       'sqft_lot', 'floors', 'view', 'sqft_above', 'sqft_basement',
+       'sqft_garage', 'sqft_patio', 'yr_built', 'yr_renovated', 'address',
+       'lat', 'long', 'house_age', 'month', 'year', 'day', 'season_winter',
+       'season_spring', 'season_summer', 'season_fall', 'pp_sqft', 'state',
+       'zip', 'city', 'waterfront_YES', 'sewer_system_PRIVATE RESTRICTED',
+       'sewer_system_PUBLIC', 'sewer_system_PUBLIC RESTRICTED',
+       'heat_source_Electricity/Solar', 'heat_source_Gas',
+       'heat_source_Gas/Solar', 'heat_source_Oil', 'heat_source_Oil/Solar',
+       'heat_source_Other', 'zip_tier_1', 'zip_tier_2', 'zip_tier_3',
+       'zip_tier_4', 'zip_tier_5', 'zip_tier_6', 'zip_tier_7', 'nuisance_YES',
+       'greenbelt_YES', 'condition_Fair', 'condition_Good', 'condition_Poor',
+       'condition_Very Good', 'grade_11 Excellent', 'grade_12 Luxury',
+       'grade_13 Mansion', 'grade_2 Substandard', 'grade_3 Poor',
+       'grade_4 Low', 'grade_5 Fair', 'grade_6 Low Average', 'grade_7 Average',
+       'grade_8 Good', 'grade_9 Better']
+
+
 ### Identifying correlated features 
 
 ##### Heatmap of correlated variables
@@ -46,6 +68,9 @@ Target 'price' is fairly skewed.
 ##### Correlation matrix with respect to 'price'
 
 ![Correlation Matrix](Images/corr_with_price.png)
+
+
+
 
 ### Baseline model results:
 
@@ -58,4 +83,31 @@ The R-squared value of 0.3804 indicates that the model explains about 38% of the
 The regression coefficient for sqft_living is 565.41, which means that for each additional square foot of living space, the sale price of the home increases by $565.41. The constant term of -92223.53 represents the estimated value of the target variable when the predictor variable is zero (i.e., when the living space is zero). However, this interpretation is not meaningful in this case since it is impossible for a home to have zero living space.
 
 ![Baseline QQ Plot](Images/qqplot_baseline_model.png)
+
+The qq plot above shows that a large portion of the true data points in 'sqft_living' stray far from normal distribution. This means that the model is underestimating the price for many of the higher values of 'sqft_living'. This is even further evidence that we should log-transform.
+
+## Iterating the model
+
+
+
+
+
+
+### Log Transformations
+
+After performing log transformation on the target and feature from our simple baseline model, we see that the distribution of each normalizes:
+
+![Price vs. Price_Log](Images/price_vs_pricelog.png)
+
+![Sqft_Living vs Sqft_Living Log](Images/sqft_vs_sqftlog.png)
+
+### Scaling
+
+Using MinMaxScaler from Sci-kit Learn, we were able to scale the data to a given range (0 - 1).
+
+This is done by subtracting the minimum value of the feature and then dividing it by the range (the difference between the maximum and minimum values). The purpose of feature scaling is to standardize the range of independent variables or features of data. 
+
+### Iterated model
+
+
 
