@@ -55,12 +55,16 @@ We created new features and one-hot encoded categorical features to come up with
        'grade_8 Good', 'grade_9 Better'
        
 
+### Scatterplot of top 10 zipcodes by price 
+
+![Top 10 Zipcodes by Price](Images/top_10_zips.png)
+
+
 ### Identifying correlated features 
 
 ##### Heatmap of correlated variables
 
 ![Correlation Matrix](Images/corr_matrix_2.png)
-
 
 
 
